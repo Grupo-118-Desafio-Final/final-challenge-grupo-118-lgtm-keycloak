@@ -1,0 +1,192 @@
+cluster:
+  name: rancher-dekstop-local-cluster
+destinations:
+  - name: grafana-cloud-metrics
+    type: prometheus
+    url: ${GRAFANA_METRICS_URL}
+    auth:
+      type: basic
+      username: "2920399"
+      password: ${GRAFANA_API_KEY}
+  - name: grafana-cloud-logs
+    type: loki
+    url: ${GRAFANA_LOGS_URL}
+    auth:
+      type: basic
+      username: "1455872"
+      password: ${GRAFANA_API_KEY}
+  - name: grafana-cloud-traces
+    type: otlp
+    url: ${GRAFANA_TRACES_URL}
+    protocol: grpc
+    auth:
+      type: basic
+      username: "1450182"
+      password: ${GRAFANA_API_KEY}
+    metrics:
+      enabled: false
+    logs:
+      enabled: false
+    traces:
+      enabled: true
+clusterMetrics:
+  enabled: false
+  opencost:
+    enabled: false
+    metricsSource: grafana-cloud-metrics
+    opencost:
+      exporter:
+        defaultClusterId: rancher-dekstop-local-cluster
+      prometheus:
+        existingSecretName: grafana-cloud-metrics-grafana-k8s-monitoring
+        external:
+          url: ${GRAFANA_PROMETHEUS_URL}
+  kepler:
+    enabled: false
+clusterEvents:
+  enabled: false
+podLogs:
+  enabled: false
+applicationObservability:
+  enabled: true
+  receivers:
+    otlp:
+      grpc:
+        enabled: false
+        port: 4317
+      http:
+        enabled: true
+        port: 4318
+    zipkin:
+      enabled: false
+      port: 9411
+  connectors:
+    grafanaCloudMetrics:
+      enabled: true
+alloy-metrics:
+  liveDebugging:
+    enabled: true
+  stabilityLevel: experimental
+  enabled: true
+  alloy:
+    extraEnv:
+      - name: GCLOUD_RW_API_KEY
+        value: ${GRAFANA_API_KEY}
+      - name: CLUSTER_NAME
+        value: rancher-dekstop-local-cluster
+      - name: NAMESPACE
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.namespace
+      - name: POD_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.name
+      - name: GCLOUD_FM_COLLECTOR_ID
+        value: grafana-k8s-monitoring-$(CLUSTER_NAME)-$(NAMESPACE)-$(POD_NAME)
+  remoteConfig:
+    enabled: true
+    url: ${GRAFANA_FLEET_MANAGEMENT_URL}
+    auth:
+      type: basic
+      username: "1498083"
+      passwordFrom: sys.env("GCLOUD_RW_API_KEY")
+alloy-singleton:
+  enabled: true
+  alloy:
+    extraEnv:
+      - name: GCLOUD_RW_API_KEY
+        value: ${GRAFANA_API_KEY}
+      - name: CLUSTER_NAME
+        value: rancher-dekstop-local-cluster
+      - name: NAMESPACE
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.namespace
+      - name: POD_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.name
+      - name: GCLOUD_FM_COLLECTOR_ID
+        value: grafana-k8s-monitoring-$(CLUSTER_NAME)-$(NAMESPACE)-$(POD_NAME)
+  remoteConfig:
+    enabled: true
+    url: ${GRAFANA_FLEET_MANAGEMENT_URL}
+    auth:
+      type: basic
+      username: "1498083"
+      passwordFrom: sys.env("GCLOUD_RW_API_KEY")
+alloy-logs:
+  enabled: true
+  alloy:
+    extraEnv:
+      - name: GCLOUD_RW_API_KEY
+        value: ${GRAFANA_API_KEY}
+      - name: CLUSTER_NAME
+        value: rancher-dekstop-local-cluster
+      - name: NAMESPACE
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.namespace
+      - name: POD_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.name
+      - name: NODE_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: spec.nodeName
+      - name: GCLOUD_FM_COLLECTOR_ID
+        value: grafana-k8s-monitoring-$(CLUSTER_NAME)-$(NAMESPACE)-alloy-logs-$(NODE_NAME)
+  remoteConfig:
+    enabled: true
+    url: ${GRAFANA_FLEET_MANAGEMENT_URL}
+    auth:
+      type: basic
+      username: "1498083"
+      passwordFrom: sys.env("GCLOUD_RW_API_KEY")
+alloy-receiver:
+  liveDebugging:
+    enabled: true
+  stabilityLevel: experimental
+  enabled: true
+  alloy:
+    extraPorts:
+      - name: otlp-grpc
+        port: 4317
+        targetPort: 4317
+        protocol: TCP
+      - name: otlp-http
+        port: 4318
+        targetPort: 4318
+        protocol: TCP
+      - name: zipkin
+        port: 9411
+        targetPort: 9411
+        protocol: TCP
+    extraEnv:
+      - name: GCLOUD_RW_API_KEY
+        value: ${GRAFANA_API_KEY}
+      - name: CLUSTER_NAME
+        value: rancher-dekstop-local-cluster
+      - name: NAMESPACE
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.namespace
+      - name: POD_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.name
+      - name: NODE_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: spec.nodeName
+      - name: GCLOUD_FM_COLLECTOR_ID
+        value: grafana-k8s-monitoring-$(CLUSTER_NAME)-$(NAMESPACE)-alloy-receiver-$(NODE_NAME)
+  remoteConfig:
+    enabled: true
+    url: ${GRAFANA_FLEET_MANAGEMENT_URL}
+    auth:
+      type: basic
+      username: "1498083"
+      passwordFrom: sys.env("GCLOUD_RW_API_KEY")
