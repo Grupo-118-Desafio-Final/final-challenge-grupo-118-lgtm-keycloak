@@ -68,6 +68,9 @@ alloy-metrics:
     enabled: true
   stabilityLevel: experimental
   enabled: true
+  controller:
+    type: deployment
+    replicas: 1  
   alloy:
     extraEnv:
       - name: GCLOUD_RW_API_KEY
@@ -118,6 +121,9 @@ alloy-singleton:
       passwordFrom: sys.env("GCLOUD_RW_API_KEY")
 alloy-logs:
   enabled: true
+  controller:
+    type: deployment
+    replicas: 1  
   alloy:
     extraEnv:
       - name: GCLOUD_RW_API_KEY
@@ -150,6 +156,9 @@ alloy-receiver:
     enabled: true
   stabilityLevel: experimental
   enabled: true
+  controller:
+    type: deployment
+    replicas: 1  
   alloy:
     extraPorts:
       - name: otlp-grpc
