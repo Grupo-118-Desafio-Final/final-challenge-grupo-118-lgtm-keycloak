@@ -3,9 +3,6 @@ name: "Deploy Infra Elements"
 on:
   workflow_call:
     inputs:
-      cluster_name:
-        required: true
-        type: string
       namespace_name:
         required: true
         type: string
@@ -61,7 +58,7 @@ jobs:
         run: |
           envsubst < ${{ inputs.alloy_values_file }} > alloy-values-processed.yaml
         env:
-          CLUSTER_NAME: ${{ inputs.cluster_name }}
+          CLUSTER_NAME: ${{ secrets.AKS_CLUSTER_NAME }}
           GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
           GRAFANA_METRICS_URL: ${{ secrets.GRAFANA_METRICS_URL }}
           GRAFANA_LOGS_URL: ${{ secrets.GRAFANA_LOGS_URL }}
