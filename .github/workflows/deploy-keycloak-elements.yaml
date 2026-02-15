@@ -67,7 +67,7 @@ jobs:
         run: |
           envsubst < ${{ inputs.keycloak_values_file }} > keycloak-values-processed.yaml
         env:
-          SQLSERVER_PORT: {{ secrets.SQLSERVER_PORT }}
+          SQLSERVER_PORT: ${{ secrets.SQLSERVER_PORT }}
           SQLSERVER_HOST: ${{ secrets.SQLSERVER_HOST }}
           SQLSERVER_DATABASENAME: ${{ secrets.SQLSERVER_DATABASENAME }}
           SQLSERVER_USER: ${{ secrets.SQLSERVER_USER }}
