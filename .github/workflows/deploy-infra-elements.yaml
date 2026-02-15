@@ -3,10 +3,14 @@ name: "Deploy Infra Elements"
 on:
   workflow_call:
     inputs:
-      namespace_name:
+      alloy_namespace_name:
         required: true
         type: string
         default: "alloy-monitoring"
+      keycloak_namespace_name:
+        required: true
+        type: string
+        default: "keycloak"        
       alloy_values_file:
         required: true
         type: string
@@ -86,7 +90,7 @@ jobs:
           
           helm repo add grafana https://grafana.github.io/helm-charts
           helm repo update
-          helm upgrade --install --atomic --timeout 300s grafana-k8s-monitoring grafana/k8s-monitoring --namespace "${{ inputs.namespace_name }}" --create-namespace --values alloy-values-processed.yml
+          helm upgrade --install --atomic --timeout 300s grafana-k8s-monitoring grafana/k8s-monitoring --namespace "${{ inputs.alloy_namespace_name }}" --create-namespace --values alloy-values-processed.yml
 
   deploy_keycloak:
     runs-on: ubuntu-latest
@@ -108,4 +112,31 @@ jobs:
 
       - name: Get AKS credentials
         run: |
-          az aks get-credentials --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AKS_CLUSTER_NAME }}    
+          az aks get-credentials --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AKS_CLUSTER_NAME }}
+          
+      - name: Create Keycloak Realm ConfigMap
+        run: |
+          kubectl create configmap keycloak-realm-config \
+            --from-file=realm-export.json=Keycloak/realm-export.json \
+            --namespace <namespace> \
+            --dry-run=client -o yaml | kubectl apply -f -
+        
+      - name: Process Keycloak values file
+        run: |
+          envsubst < Keycloak/keycloak-values.yaml > keycloak-values-processed.yaml
+        env:
+          SQLSERVER_PORT: {{ secrets.SQLSERVER_PORT }}
+          SQLSERVER_HOST: ${{ secrets.SQLSERVER_HOST }}
+          SQLSERVER_DATABASENAME: ${{ secrets.SQLSERVER_DATABASENAME }}
+          SQLSERVER_USER: ${{ secrets.SQLSERVER_USER }}
+          SQLSERVER_PASSWORD: ${{ secrets.SQLSERVER_PASSWORD }}
+          
+      - name: Deploy Keycloak to Kubernetes
+        run: |
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm repo update
+          
+          helm upgrade --install --atomic --timeout 600s keycloak bitnami/keycloak \
+            --namespace ${{ inputs.keycloak_namespace_name }} \
+            --create-namespace \
+            --values keycloak-values-processed.yaml

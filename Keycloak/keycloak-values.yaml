@@ -16,3 +16,13 @@ extraEnvVars:
     value: 'jdbc:sqlserver://${SQLSERVER_HOST}:${SQLSERVER_PORT};databaseName=${SQLSERVER_DATABASENAME};'
 
 # Configurations on: https://artifacthub.io/packages/helm/bitnami/keycloak
+
+# Keycloak/keycloak-values.yaml
+keycloakConfigCli:
+  enabled: true
+  command:
+    - java
+    - -jar
+    - /opt/bitnami/keycloak-config-cli/keycloak-config-cli.jar
+  
+  existingConfigmap: keycloak-realm-config
