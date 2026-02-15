@@ -1,16 +1,18 @@
 name: "Deploy Keycloak Elements"
 
 on:
-  workflow_call:
+  workflow_dispatch:
     inputs:
       keycloak_namespace_name:
         required: true
         type: string
         default: "keycloak"
+        description: "The Kubernetes namespace where Keycloak will be deployed."
       keycloak_values_file:
         required: true
         type: string
         default: "Keycloak/keycloak-values.yaml"
+        description: "The path to the Helm values file for Keycloak deployment. This file should be in the repository and can contain placeholders for secrets that will be replaced during the workflow execution."
     secrets:
       AZURE_CREDENTIALS:
         required: true

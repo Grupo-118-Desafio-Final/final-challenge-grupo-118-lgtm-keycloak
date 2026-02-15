@@ -1,16 +1,18 @@
 name: "Deploy LGTM Elements"
 
 on:
-  workflow_call:
+  workflow_dispatch:
     inputs:
       alloy_namespace_name:
         required: true
         type: string
-        default: "alloy-monitoring"  
+        default: "alloy-monitoring"
+        description: "The Kubernetes namespace where the LGTM elements will be deployed."
       alloy_values_file:
         required: true
         type: string
         default: "Alloy/alloy-values.yaml"
+        description: "The path to the Helm values file for LGTM deployment. This file should be in the repository and can contain placeholders for secrets that will be replaced during the workflow execution."
     secrets:
       AZURE_CREDENTIALS:
         required: true
