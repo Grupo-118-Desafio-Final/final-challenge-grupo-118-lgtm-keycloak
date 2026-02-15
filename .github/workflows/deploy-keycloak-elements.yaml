@@ -3,7 +3,6 @@ name: "Deploy Keycloak Elements"
 on:
   workflow_call:
     inputs:
-
       keycloak_namespace_name:
         required: true
         type: string
