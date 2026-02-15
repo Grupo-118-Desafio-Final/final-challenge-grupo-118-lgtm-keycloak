@@ -15,6 +15,10 @@ on:
         required: true
         type: string
         default: "Alloy/alloy-values.yaml"
+      keycloak_values_file:
+        required: true
+        type: string
+        default: "Keycloak/keycloak-values.yaml"
     secrets:
       AZURE_CREDENTIALS:
         required: true
@@ -113,17 +117,21 @@ jobs:
       - name: Get AKS credentials
         run: |
           az aks get-credentials --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AKS_CLUSTER_NAME }}
+
+      - name: Create namespace if not exists
+        run: |
+          kubectl create namespace ${{ inputs.keycloak_namespace_name }} --dry-run=client -o yaml | kubectl apply -f -
           
       - name: Create Keycloak Realm ConfigMap
         run: |
           kubectl create configmap keycloak-realm-config \
             --from-file=realm-export.json=Keycloak/realm-export.json \
-            --namespace <namespace> \
+            --namespace ${{ inputs.keycloak_namespace_name }} \
             --dry-run=client -o yaml | kubectl apply -f -
         
       - name: Process Keycloak values file
         run: |
-          envsubst < Keycloak/keycloak-values.yaml > keycloak-values-processed.yaml
+          envsubst < ${{ inputs.keycloak_values_file }} > keycloak-values-processed.yaml
         env:
           SQLSERVER_PORT: {{ secrets.SQLSERVER_PORT }}
           SQLSERVER_HOST: ${{ secrets.SQLSERVER_HOST }}
