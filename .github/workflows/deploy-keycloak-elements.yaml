@@ -1,20 +1,13 @@
-name: "Deploy Infra Elements"
+name: "Deploy Keycloak Elements"
 
 on:
   workflow_call:
     inputs:
-      alloy_namespace_name:
-        required: true
-        type: string
-        default: "alloy-monitoring"
+
       keycloak_namespace_name:
         required: true
         type: string
-        default: "keycloak"        
-      alloy_values_file:
-        required: true
-        type: string
-        default: "Alloy/alloy-values.yaml"
+        default: "keycloak"
       keycloak_values_file:
         required: true
         type: string
@@ -25,18 +18,6 @@ on:
       AZURE_RESOURCE_GROUP:
         required: true
       AKS_CLUSTER_NAME:
-        required: true
-      GRAFANA_API_KEY:
-        required: true
-      GRAFANA_METRICS_URL:
-        required: true
-      GRAFANA_LOGS_URL:
-        required: true
-      GRAFANA_TRACES_URL:
-        required: true
-      GRAFANA_PROMETHEUS_URL:
-        required: true
-      GRAFANA_FLEET_MANAGEMENT_URL:
         required: true
       SQLSERVER_HOST:
         required: true
@@ -50,52 +31,6 @@ on:
         required: true
 
 jobs:
-  deploy_lgtm_elements:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Azure Login
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Set up kubectl
-        uses: azure/setup-kubectl@v3
-        with:
-          version: 'latest'
-
-      - name: Set up Helm
-        uses: azure/setup-helm@v3
-        with:
-          version: '3.12.0'
-
-      - name: Get AKS credentials
-        run: |
-          az aks get-credentials --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AKS_CLUSTER_NAME }}
-
-      - name: Process Alloy values file
-        run: |
-          envsubst < ${{ inputs.alloy_values_file }} > alloy-values-processed.yaml
-        env:
-          CLUSTER_NAME: ${{ secrets.AKS_CLUSTER_NAME }}
-          GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
-          GRAFANA_METRICS_URL: ${{ secrets.GRAFANA_METRICS_URL }}
-          GRAFANA_LOGS_URL: ${{ secrets.GRAFANA_LOGS_URL }}
-          GRAFANA_TRACES_URL: ${{ secrets.GRAFANA_TRACES_URL }}
-          GRAFANA_PROMETHEUS_URL: ${{ secrets.GRAFANA_PROMETHEUS_URL }}
-          GRAFANA_FLEET_MANAGEMENT_URL: ${{ secrets.GRAFANA_FLEET_MANAGEMENT_URL }}
-
-      - name: Deploy Alloy to Kubernetes
-        run: |
-          
-          echo "=== Print Helm Chart Values ==="
-          cat alloy-values-processed.yaml
-          
-          echo "=== Deploying Helm Chart ==="
-          
-          helm repo add grafana https://grafana.github.io/helm-charts
-          helm repo update
-          helm upgrade --install --atomic --timeout 300s grafana-k8s-monitoring grafana/k8s-monitoring --namespace "${{ inputs.alloy_namespace_name }}" --create-namespace --values alloy-values-processed.yml
-
   deploy_keycloak:
     runs-on: ubuntu-latest
     steps:
