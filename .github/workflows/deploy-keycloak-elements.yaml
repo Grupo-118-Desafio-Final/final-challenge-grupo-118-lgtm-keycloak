@@ -13,23 +13,6 @@ on:
         type: string
         default: "Keycloak/keycloak-values.yaml"
         description: "The path to the Helm values file for Keycloak deployment. This file should be in the repository and can contain placeholders for secrets that will be replaced during the workflow execution."
-    secrets:
-      AZURE_CREDENTIALS:
-        required: true
-      AZURE_RESOURCE_GROUP:
-        required: true
-      AKS_CLUSTER_NAME:
-        required: true
-      SQLSERVER_HOST:
-        required: true
-      SQLSERVER_PORT:
-        required: true
-      SQLSERVER_DATABASENAME:
-        required: true
-      SQLSERVER_USER:
-        required: true
-      SQLSERVER_PASSWORD:
-        required: true
 
 jobs:
   deploy_keycloak:

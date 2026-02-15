@@ -13,25 +13,6 @@ on:
         type: string
         default: "Alloy/alloy-values.yaml"
         description: "The path to the Helm values file for LGTM deployment. This file should be in the repository and can contain placeholders for secrets that will be replaced during the workflow execution."
-    secrets:
-      AZURE_CREDENTIALS:
-        required: true
-      AZURE_RESOURCE_GROUP:
-        required: true
-      AKS_CLUSTER_NAME:
-        required: true
-      GRAFANA_API_KEY:
-        required: true
-      GRAFANA_METRICS_URL:
-        required: true
-      GRAFANA_LOGS_URL:
-        required: true
-      GRAFANA_TRACES_URL:
-        required: true
-      GRAFANA_PROMETHEUS_URL:
-        required: true
-      GRAFANA_FLEET_MANAGEMENT_URL:
-        required: true
 
 jobs:
   deploy_lgtm_elements:
