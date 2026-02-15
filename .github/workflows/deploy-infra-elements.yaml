@@ -30,6 +30,16 @@ on:
         required: true
       GRAFANA_FLEET_MANAGEMENT_URL:
         required: true
+      SQLSERVER_HOST:
+        required: true
+      SQLSERVER_PORT:
+        required: true
+      SQLSERVER_DATABASENAME:
+        required: true
+      SQLSERVER_USER:
+        required: true
+      SQLSERVER_PASSWORD:
+        required: true
 
 jobs:
   deploy_lgtm_elements:

@@ -1,0 +1,18 @@
+externalDatabase:
+  host: "${SQLSERVER_HOST}"
+  port: ${SQLSERVER_PORT}
+  user: ${SQLSERVER_USER}
+  database: ${SQLSERVER_DATABASENAME}
+  password: ${SQLSERVER_PASSWORD}
+  existingSecret: passwords
+
+postgresql:
+  enabled: false
+
+extraEnvVars:
+  - name: KC_DB # override values from the conf file
+    value: 'mssql'
+  - name: KC_DB_URL
+    value: 'jdbc:sqlserver://${SQLSERVER_HOST}:${SQLSERVER_PORT};databaseName=${SQLSERVER_DATABASENAME};'
+
+# Configurations on: https://artifacthub.io/packages/helm/bitnami/keycloak
