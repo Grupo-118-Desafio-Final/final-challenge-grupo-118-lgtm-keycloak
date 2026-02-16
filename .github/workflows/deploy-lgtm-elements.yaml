@@ -64,4 +64,4 @@ jobs:
           
           helm repo add grafana https://grafana.github.io/helm-charts
           helm repo update
-          helm upgrade --install --atomic --timeout 300s grafana-k8s-monitoring grafana/k8s-monitoring --namespace "${{ inputs.alloy_namespace_name }}" --create-namespace --values alloy-values-processed.yml
+          helm upgrade --install --atomic --timeout 300s grafana-k8s-monitoring grafana/k8s-monitoring --namespace "${{ inputs.alloy_namespace_name }}" --create-namespace --values alloy-values-processed.yaml

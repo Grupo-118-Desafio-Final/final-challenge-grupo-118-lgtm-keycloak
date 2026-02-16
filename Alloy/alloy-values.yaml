@@ -1,5 +1,5 @@
 cluster:
-  name: rancher-dekstop-local-cluster
+  name: ${CLUSTER_NAME}
 destinations:
   - name: grafana-cloud-metrics
     type: prometheus
@@ -36,7 +36,7 @@ clusterMetrics:
     metricsSource: grafana-cloud-metrics
     opencost:
       exporter:
-        defaultClusterId: rancher-dekstop-local-cluster
+        defaultClusterId: ${CLUSTER_NAME}
       prometheus:
         existingSecretName: grafana-cloud-metrics-grafana-k8s-monitoring
         external:
@@ -76,7 +76,7 @@ alloy-metrics:
       - name: GCLOUD_RW_API_KEY
         value: ${GRAFANA_API_KEY}
       - name: CLUSTER_NAME
-        value: rancher-dekstop-local-cluster
+        value: ${CLUSTER_NAME}
       - name: NAMESPACE
         valueFrom:
           fieldRef:
@@ -101,7 +101,7 @@ alloy-singleton:
       - name: GCLOUD_RW_API_KEY
         value: ${GRAFANA_API_KEY}
       - name: CLUSTER_NAME
-        value: rancher-dekstop-local-cluster
+        value: ${CLUSTER_NAME}
       - name: NAMESPACE
         valueFrom:
           fieldRef:
@@ -129,7 +129,7 @@ alloy-logs:
       - name: GCLOUD_RW_API_KEY
         value: ${GRAFANA_API_KEY}
       - name: CLUSTER_NAME
-        value: rancher-dekstop-local-cluster
+        value: ${CLUSTER_NAME}
       - name: NAMESPACE
         valueFrom:
           fieldRef:
@@ -177,7 +177,7 @@ alloy-receiver:
       - name: GCLOUD_RW_API_KEY
         value: ${GRAFANA_API_KEY}
       - name: CLUSTER_NAME
-        value: rancher-dekstop-local-cluster
+        value: ${CLUSTER_NAME}
       - name: NAMESPACE
         valueFrom:
           fieldRef:
