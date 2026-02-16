@@ -18,6 +18,8 @@ extraEnvVars:
     value: 'mssql'
   - name: KC_DB_URL
     value: 'jdbc:sqlserver://${SQLSERVER_HOST}:${SQLSERVER_PORT};databaseName=${SQLSERVER_DATABASENAME};'
+  - name: KC_DB_SCHEMA
+    value: 'dbo'
 
 # Configurations on: https://artifacthub.io/packages/helm/bitnami/keycloak
 
