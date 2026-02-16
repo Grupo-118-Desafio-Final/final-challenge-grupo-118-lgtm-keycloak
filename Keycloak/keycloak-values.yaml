@@ -1,6 +1,11 @@
+#image:
+#  repository: bitnamilegacy/keycloak
+#  tag: 26.3.3-debian-12-r0
+
 image:
-  repository: bitnamilegacy/keycloak
-  tag: 26.3.3-debian-12-r0
+  registry:  quay.io
+  repository: keycloak/keycloak
+  tag: 26.5.1
 
 externalDatabase:
   host: ${SQLSERVER_HOST}
