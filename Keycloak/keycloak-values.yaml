@@ -4,7 +4,7 @@ externalDatabase:
   user: ${SQLSERVER_USER}
   database: ${SQLSERVER_DATABASENAME}
   password: ${SQLSERVER_PASSWORD}
-  existingSecret: passwords
+#  existingSecret: passwords
 
 postgresql:
   enabled: false
