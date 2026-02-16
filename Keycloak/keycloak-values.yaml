@@ -3,7 +3,7 @@ image:
   tag: 26.3.3-debian-12-r0
 
 externalDatabase:
-  host: "${SQLSERVER_HOST}"
+  host: ${SQLSERVER_HOST}
   port: ${SQLSERVER_PORT}
   user: ${SQLSERVER_USER}
   database: ${SQLSERVER_DATABASENAME}
