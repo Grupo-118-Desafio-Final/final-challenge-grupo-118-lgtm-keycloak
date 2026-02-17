@@ -1,14 +1,15 @@
 image:
-  repository: bitnamilegacy/keycloak
-  tag: 26.3.3-debian-12-r0
+  registry: quay.io
+  repository: keycloak/keycloak
+  tag: 26.3.3
 
-#auth:
-#  adminUser: ${KEYCLOAK_ADMIN_USER}
-#  adminPassword: ${KEYCLOAK_ADMIN_PASSWORD}
+auth:
+  adminUser: ${KEYCLOAK_ADMIN_USER}
+  adminPassword: ${KEYCLOAK_ADMIN_PASSWORD}
 
-#global:
-#  security:
-#    allowInsecureImages: true
+global:
+  security:
+    allowInsecureImages: true
 
 #image:
 #  registry:  quay.io
