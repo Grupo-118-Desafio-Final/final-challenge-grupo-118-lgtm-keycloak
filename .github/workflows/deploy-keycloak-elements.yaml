@@ -62,6 +62,8 @@ jobs:
           SQLSERVER_DATABASENAME: ${{ secrets.SQLSERVER_DATABASENAME }}
           SQLSERVER_USER: ${{ secrets.SQLSERVER_USER }}
           SQLSERVER_PASSWORD: ${{ secrets.SQLSERVER_PASSWORD }}
+          KEYCLOAK_ADMIN_USER: ${{ secrets.KEYCLOAK_ADMIN_USER }}
+          KEYCLOAK_ADMIN_PASSWORD: ${{ secrets.KEYCLOAK_ADMIN_PASSWORD }}
           
       - name: Deploy Keycloak to Kubernetes
         run: |
